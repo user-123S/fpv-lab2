@@ -16,3 +16,9 @@ logs/
 # python
 __pycache__/
 *.py[cod]
+
+# method notes / extracted Word (not part of the lab package)
+_method_lab/
+
+# local report copy
+*.docx

@@ -8,9 +8,15 @@
 TIMEOUT=${1:-300}
 DEADLINE=$(( $(date +%s) + TIMEOUT ))
 
-echo "Waiting for the /ap/v1 services..."
+PREARM="/ap/v1/prearm_check"
+echo "Waiting for the ${PREARM} service..."
 while [ "$(date +%s)" -lt "$DEADLINE" ]; do
-    if ros2 service list 2>/dev/null | grep -q "/ap/v1/prearm_check"; then
+    if ros2 service list 2>/dev/null | grep -qE '(^|[[:space:]])/ap/v1/prearm_check($|[[:space:]])'; then
+        PREARM="/ap/v1/prearm_check"
+        break
+    fi
+    if ros2 service list 2>/dev/null | grep -qE '(^|[[:space:]])/iris/ap/v1/prearm_check($|[[:space:]])'; then
+        PREARM="/iris/ap/v1/prearm_check"
         break
     fi
     sleep 3
@@ -24,7 +30,7 @@ STREAK=0
 
 echo "Waiting for the vehicle to become armable..."
 while [ "$(date +%s)" -lt "$DEADLINE" ]; do
-    OUT=$(timeout 15 ros2 service call /ap/v1/prearm_check std_srvs/srv/Trigger 2>/dev/null)
+    OUT=$(timeout 15 ros2 service call "$PREARM" std_srvs/srv/Trigger 2>/dev/null)
     if echo "$OUT" | grep -q "success=True"; then
         STREAK=$((STREAK + 1))
         echo "  pre-arm passed ($STREAK/$REQUIRED)"

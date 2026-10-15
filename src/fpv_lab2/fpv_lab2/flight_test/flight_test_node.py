@@ -30,9 +30,12 @@ class FlightTestNode(Node):
 
         self._handlers = HANDLERS
 
+        # SITL currently advertises the DDS API at /ap/v1 (node /ap_v1).
+        ap = "/ap/v1"
+
         self.status_subscription = self.create_subscription(
             Status,
-            "/ap/v1/status",
+            f"{ap}/status",
             self.status_callback,
             10,
         )
@@ -46,22 +49,22 @@ class FlightTestNode(Node):
 
         self.prearm_client = self.create_client(
             Trigger,
-            "/ap/v1/prearm_check",
+            f"{ap}/prearm_check",
         )
 
         self.mode_client = self.create_client(
             ModeSwitch,
-            "/ap/v1/mode_switch",
+            f"{ap}/mode_switch",
         )
 
         self.arm_client = self.create_client(
             ArmMotors,
-            "/ap/v1/arm_motors",
+            f"{ap}/arm_motors",
         )
 
         self.takeoff_client = self.create_client(
             Takeoff,
-            "/ap/v1/experimental/takeoff",
+            f"{ap}/experimental/takeoff",
         )
 
         self.timer = self.create_timer(0.2, self.control_loop)

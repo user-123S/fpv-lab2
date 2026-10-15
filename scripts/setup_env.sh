@@ -16,7 +16,11 @@ if [ -f "$HOME/fpv_labs/install/setup.bash" ]; then
     source $HOME/fpv_labs/install/setup.bash
 fi
 
-# The lidar model lives in ardupilot_gz_description, whose hooks only set
-# GZ_SIM_RESOURCE_PATH. libsdformat (used by robot_state_publisher) resolves
-# model:// through SDF_PATH, so it is added explicitly here.
-export SDF_PATH=$SDF_PATH:$HOME/ardu_ws/install/ardupilot_gz_description/share/ardupilot_gz_description/models
+# Models for Gazebo spawn and for sdformat_urdf (robot_state_publisher).
+# Without these paths /robot_description is never published and iris never
+# appears in the maze.
+MODELS_DESC=$HOME/ardu_ws/install/ardupilot_gz_description/share/ardupilot_gz_description/models
+MODELS_AP=$HOME/ardu_ws/install/ardupilot_gazebo/share/ardupilot_gazebo/models
+export GZ_SIM_RESOURCE_PATH=$MODELS_DESC:$MODELS_AP:${GZ_SIM_RESOURCE_PATH}
+export SDF_PATH=$MODELS_DESC:$MODELS_AP:${SDF_PATH}
+export LIBGL_ALWAYS_SOFTWARE=1

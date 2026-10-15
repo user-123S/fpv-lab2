@@ -20,4 +20,4 @@ echo "Starting Gazebo + ArduPilot SITL + ROS 2 ..."
 echo "Working directory: $RUN_DIR"
 echo "Leave this terminal open. Use Ctrl+C or ./stop_sim.sh to stop."
 
-exec ros2 launch ardupilot_gz_bringup iris_maze.launch.py "$@"
+exec ros2 launch ardupilot_gz_bringup iris_maze.launch.py rviz:=false "$@"

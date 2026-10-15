@@ -27,8 +27,9 @@ class GotoPointNode(FlightTestNode):
         # Use the extended handler map instead of the base one.
         self._handlers = GOTO_HANDLERS
 
-        self.declare_parameter("delta_x", 0.0)
-        self.declare_parameter("delta_y", 0.0)
+        # Variant 22 (Appendix 2): Δx = 5.2 m, Δy = 1.4 m
+        self.declare_parameter("delta_x", 5.2)
+        self.declare_parameter("delta_y", 1.4)
         self.declare_parameter("takeoff_altitude", 2.0)
         self.declare_parameter("tolerance", 0.25)
         self.declare_parameter("max_speed", 1.5)
@@ -79,6 +80,9 @@ class GotoPointNode(FlightTestNode):
             10,
         )
 
+        self.get_logger().info(
+            "Variant 22 offsets from Appendix 2: Δx=5.2 m, Δy=1.4 m"
+        )
         self.get_logger().info(
             f"Target offset applied: dx={self.delta_x:+.2f} m, "
             f"dy={self.delta_y:+.2f} m (axis_direction={self.axis_direction:+.0f})"
